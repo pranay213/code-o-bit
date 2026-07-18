@@ -60,7 +60,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // API Documentation (Swagger UI)
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs', swaggerUi.serve as any, swaggerUi.setup(swaggerSpec) as any);
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
