@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/pranay/projects/code-o-bit/backend/logs/.1868406d55a613b6108c2da8fbe613ee150689ef-audit.json",
+    "files": [
+        {
+            "date": 1784397190731,
+            "name": "/home/pranay/projects/code-o-bit/backend/logs/combined-2026-07-18.log",
+            "hash": "07b0601e5f0c85b04bbd7a77ea61caf1812f85e2e14d20c16cf8e43c6c991c37"
+        },
+        {
+            "date": 1784399797148,
+            "name": "/home/pranay/projects/code-o-bit/backend/logs/combined-2026-07-19.log",
+            "hash": "fce7369481bdff44519575a31891ee99c6d9288cf293b71b53c2bbd0fe83efe2"
+        }
+    ],
+    "hashType": "sha256"
+}
