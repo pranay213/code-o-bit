@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { Box, Button, Container, TextField, Typography, Alert } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Alert, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { UI_STRINGS } from '@/constants/ui-strings';
 import NavBar from '@/components/nav-bar';
 import { apiFetch } from '@/utils/api';
@@ -15,6 +17,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
@@ -82,12 +85,25 @@ export default function LoginPage() {
               <TextField
                 fullWidth
                 label={UI_STRINGS.AUTH_PASSWORD_LABEL}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 margin="normal"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Button
                 fullWidth
