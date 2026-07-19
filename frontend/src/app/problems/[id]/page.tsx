@@ -21,6 +21,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { apiFetch } from '@/utils/api';
 import CodingPreloader from '@/components/ui/coding-preloader';
 import { useAuth } from '@/context/auth-context';
+import { toast } from 'react-toastify';
+import { playRunSound, playSuccessSound, playErrorSound } from '@/utils/audio';
 
 const DEFAULT_CODE: Record<string, string> = {
   javascript: `const fs = require('fs');
@@ -131,9 +133,13 @@ export default function ProblemSolvingPage() {
 
   const handleSubmit = async () => {
     if (!user) {
+      toast.error('Please log in to submit code');
       router.push('/login');
       return;
     }
+    
+    playRunSound();
+    toast.info('Executing code...', { autoClose: 2000 });
     
     setSubmitting(true);
     setSubmissionResult(null);
@@ -153,9 +159,18 @@ export default function ProblemSolvingPage() {
       
       if (res.success) {
         setSubmissionResult(res.data);
+        if (res.data.status === 'Accepted') {
+          playSuccessSound();
+          toast.success('Success! All test cases passed.');
+        } else {
+          playErrorSound();
+          toast.warning(`Submission evaluated: ${res.data.status}`);
+        }
       }
     } catch (err: any) {
       setSubmissionResult({ status: 'Error', error: err.message });
+      playErrorSound();
+      toast.error(`Error: ${err.message}`);
     } finally {
       setSubmitting(false);
     }
