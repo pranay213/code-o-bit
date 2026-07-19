@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/server.ts",
-    "build": "tsc && tsc-alias",
+    "build": "npx tsc && npx tsc-alias",
     "start": "node dist/server.js",
     "seed:problems": "ts-node -r tsconfig-paths/register src/scripts/seed-1000-problems.ts",
     "lint": "eslint src --ext .ts",
