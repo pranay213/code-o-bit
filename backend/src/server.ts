@@ -5,6 +5,7 @@ import { serverLogger } from '@/config/logger';
 import { LOG_MESSAGES } from '@/constants/log-messages';
 
 async function bootstrap(): Promise<void> {
+  // Application startup sequence
   serverLogger.info(LOG_MESSAGES.SERVER_STARTING);
 
   await connectDatabase();
