@@ -15,6 +15,7 @@ export interface ISubmission extends Document {
   passedCases: number | null;
   totalCases: number | null;
   score: number | null;
+  testcaseResults: any[];
   createdAt: Date;
 }
 
@@ -40,6 +41,19 @@ const submissionSchema = new Schema<ISubmission>(
     passedCases: { type: Number, default: null },
     totalCases: { type: Number, default: null },
     score: { type: Number, default: null },
+    testcaseResults: {
+      type: [
+        {
+          status: { type: String, required: true },
+          executionTime: { type: Number, required: true },
+          consoleOutput: { type: String, default: '' },
+          expectedOutput: { type: String },
+          actualOutput: { type: String },
+          error: { type: String },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: { createdAt: true, updatedAt: false } },
 );

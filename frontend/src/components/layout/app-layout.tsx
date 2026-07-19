@@ -38,7 +38,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               </IconButton>
               
               <Box sx={{ 
-                display: 'flex', 
+                display: { xs: 'none', md: 'flex' }, 
                 alignItems: 'center', 
                 bgcolor: 'background.default', 
                 borderRadius: 2, 
@@ -57,7 +57,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   px: 1, 
                   border: '1px solid',
                   borderColor: 'divider',
-                  display: { xs: 'none', sm: 'block' }
                 }}>
                   <Typography variant="caption" color="text.secondary">⌘ K</Typography>
                 </Box>

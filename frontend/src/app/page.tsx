@@ -69,7 +69,7 @@ export default function Home() {
             {UI_STRINGS.LANDING_SUBTITLE}
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', flexDirection: { xs: 'column', sm: 'row' } }}>
             <Button
               variant="contained"
               color="primary"

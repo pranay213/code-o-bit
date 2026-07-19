@@ -32,6 +32,7 @@ function toSubmissionDto(submission: ISubmission): SubmissionDto {
     passedCases: submission.passedCases ?? undefined,
     totalCases: submission.totalCases ?? undefined,
     score: submission.score ?? undefined,
+    testcaseResults: submission.testcaseResults ?? undefined,
     createdAt: submission.createdAt,
   };
 }
@@ -70,6 +71,7 @@ export const submissionService = {
       errorMessage: judgeResult.errorMessage,
       passedCases: judgeResult.passedCases,
       totalCases: judgeResult.totalCases,
+      testcaseResults: judgeResult.testcaseResults,
       score: score > 0 ? score : undefined
     });
 
@@ -121,6 +123,7 @@ export const submissionService = {
       errorMessage?: string;
       passedCases?: number;
       totalCases?: number;
+      testcaseResults?: any[];
       score?: number;
     },
   ): Promise<SubmissionDto | null> {

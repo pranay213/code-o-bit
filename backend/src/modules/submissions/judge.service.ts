@@ -5,6 +5,15 @@ import { spawn } from 'child_process';
 import { IProblem } from '@/modules/problems/problem.model';
 import { SUBMISSION_STATUS } from '@/constants/submission-status';
 
+export interface TestCaseResult {
+  status: string;
+  executionTime: number;
+  consoleOutput: string;
+  expectedOutput?: string;
+  actualOutput?: string;
+  error?: string;
+}
+
 interface JudgeResult {
   status: string;
   executionTime: number;
@@ -12,6 +21,7 @@ interface JudgeResult {
   errorMessage?: string;
   passedCases: number;
   totalCases: number;
+  testcaseResults?: TestCaseResult[];
 }
 
 export const judgeService = {
@@ -69,11 +79,22 @@ export const judgeService = {
     let maxExecutionTime = 0;
     let finalStatus: string = SUBMISSION_STATUS.ACCEPTED;
     let firstErrorMessage: string | undefined;
+    const testcaseResults: TestCaseResult[] = [];
 
     for (let i = 0; i < totalCases; i++) {
       const testCase = problem.testCases[i];
       const result = await runTestCase(language, tempDir, testCase.input, problem.timeLimit);
       
+      const tcResult: TestCaseResult = {
+        status: result.status,
+        executionTime: result.executionTime,
+        consoleOutput: result.output,
+        actualOutput: result.output.trim(),
+      };
+      if (testCase.isPublic) {
+        tcResult.expectedOutput = testCase.expectedOutput.trim();
+      }
+
       if (result.executionTime > maxExecutionTime) {
         maxExecutionTime = result.executionTime;
       }
@@ -81,6 +102,9 @@ export const judgeService = {
       if (result.error) {
         finalStatus = result.status;
         firstErrorMessage = result.error;
+        tcResult.error = result.error;
+        tcResult.status = result.status;
+        testcaseResults.push(tcResult);
         break; // Stop at first failed test case
       }
 
@@ -90,11 +114,16 @@ export const judgeService = {
       
       if (expectedOutput === actualOutput) {
         passedCases++;
+        tcResult.status = SUBMISSION_STATUS.ACCEPTED;
       } else {
         finalStatus = SUBMISSION_STATUS.WRONG_ANSWER;
         firstErrorMessage = `Expected "${expectedOutput}" but got "${actualOutput}"`;
+        tcResult.status = SUBMISSION_STATUS.WRONG_ANSWER;
+        tcResult.error = firstErrorMessage;
+        testcaseResults.push(tcResult);
         break;
       }
+      testcaseResults.push(tcResult);
     }
 
     // Cleanup
@@ -106,7 +135,8 @@ export const judgeService = {
       memoryUsed: Math.floor(Math.random() * 20) + 10, // Mock memory for now as reading RSS is complex in Node
       errorMessage: firstErrorMessage,
       passedCases,
-      totalCases
+      totalCases,
+      testcaseResults
     };
   }
 };

@@ -77,7 +77,6 @@ const problemSchema = new Schema<IProblem>(
   { timestamps: true },
 );
 
-problemSchema.index({ slug: 1 });
 problemSchema.index({ difficulty: 1 });
 problemSchema.index({ tags: 1 });
 problemSchema.index({ isPublished: 1 });

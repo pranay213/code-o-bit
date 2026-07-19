@@ -53,7 +53,6 @@ const contestSchema = new Schema<IContest>(
   { timestamps: true },
 );
 
-contestSchema.index({ slug: 1 });
 contestSchema.index({ status: 1 });
 contestSchema.index({ startTime: 1, endTime: 1 });
 

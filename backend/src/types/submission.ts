@@ -16,6 +16,7 @@ export interface SubmissionDto {
   passedCases?: number;
   totalCases?: number;
   score?: number;
+  testcaseResults?: any[];
   createdAt: Date;
 }
 

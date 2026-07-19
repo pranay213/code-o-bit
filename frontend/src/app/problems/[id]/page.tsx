@@ -181,7 +181,7 @@ export default function ProblemSolvingPage() {
 
   return (
     <AppLayout>
-      <Box sx={{ flexGrow: 1, height: 'calc(100vh - 72px)', display: 'flex', flexDirection: 'column', overflow: 'hidden', p: 1 }}>
+      <Box sx={{ flexGrow: 1, height: { xs: 'auto', md: 'calc(100vh - 72px)' }, display: 'flex', flexDirection: 'column', overflow: { xs: 'visible', md: 'hidden' }, p: 1 }}>
         
         {/* Breadcrumb / Top Info */}
         <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -200,10 +200,10 @@ export default function ProblemSolvingPage() {
           </Box>
         </Box>
 
-        <Grid container spacing={1} sx={{ height: '100%', minHeight: 0 }}>
+        <Grid container spacing={1} sx={{ height: { xs: 'auto', md: '100%' }, minHeight: 0 }}>
           
           {/* LEFT PANE: Description */}
-          <Grid size={{ xs: 12, md: 5 }} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Grid size={{ xs: 12, md: 5 }} sx={{ display: 'flex', flexDirection: 'column', height: { xs: 'auto', md: '100%' }, minHeight: { xs: 500, md: 0 } }}>
             <Paper sx={{ flex: 1, display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.paper' }}>
               <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable" sx={{ minHeight: 36, '& .MuiTab-root': { minHeight: 36, py: 0.5, px: 2, fontSize: '0.85rem' } }}>
                 <Tab label="Description" sx={{ textTransform: 'none', fontWeight: 'bold' }} />
@@ -339,10 +339,10 @@ export default function ProblemSolvingPage() {
           </Grid>
 
           {/* RIGHT PANE: IDE & Console */}
-          <Grid size={{ xs: 12, md: 7 }} sx={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 1 }}>
+          <Grid size={{ xs: 12, md: 7 }} sx={{ display: 'flex', flexDirection: 'column', height: { xs: 'auto', md: '100%' }, gap: 1 }}>
             
             {/* EDITOR */}
-            <Paper sx={{ flex: 2, display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden', bgcolor: '#1e1e1e' }}>
+            <Paper sx={{ flex: 2, display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden', bgcolor: '#1e1e1e', minHeight: { xs: 400, md: 0 } }}>
               <Box sx={{ p: 0.5, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   <Select 
@@ -403,7 +403,7 @@ export default function ProblemSolvingPage() {
             </Paper>
 
             {/* TESTCASES / CONSOLE */}
-            <Paper sx={{ flex: 1.2, display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.paper' }}>
+            <Paper sx={{ flex: 1.2, display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.paper', minHeight: { xs: 300, md: 0 }, mb: { xs: 4, md: 0 } }}>
               <Tabs value={testcaseTab} onChange={(_, v) => setTestcaseTab(v)} sx={{ minHeight: 32, borderBottom: 1, borderColor: 'divider', '& .MuiTab-root': { minHeight: 32, py: 0.5, fontSize: '0.8rem' } }}>
                 <Tab label="Testcase" sx={{ textTransform: 'none' }} />
                 <Tab label="Custom Input" sx={{ textTransform: 'none' }} />
@@ -483,6 +483,48 @@ export default function ProblemSolvingPage() {
                             <Typography variant="body2" color="error.main">
                               Passed {submissionResult.passedCases} out of {submissionResult.totalCases} testcases.
                             </Typography>
+                          </Box>
+                        )}
+                        
+                        {submissionResult.testcaseResults && submissionResult.testcaseResults.length > 0 && (
+                          <Box sx={{ mt: 4 }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>Testcase Details</Typography>
+                            {submissionResult.testcaseResults.map((tc: any, i: number) => (
+                              <Box key={i} sx={{ mb: 3, p: 2, bgcolor: 'rgba(255,255,255,0.02)', borderRadius: 2, border: 1, borderColor: 'rgba(255,255,255,0.05)' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                  <Typography variant="subtitle2" sx={{ color: tc.status === 'Accepted' ? 'success.main' : 'error.main' }}>
+                                    Test Case {i + 1}: {tc.status}
+                                  </Typography>
+                                  <Typography variant="caption" color="text.secondary">{tc.executionTime} ms</Typography>
+                                </Box>
+                                
+                                {tc.error && (
+                                  <Typography variant="caption" color="error.main" sx={{ display: 'block', mb: 1 }}>{tc.error}</Typography>
+                                )}
+
+                                {tc.expectedOutput && (
+                                  <>
+                                    <Typography variant="caption" color="text.secondary">Expected Output:</Typography>
+                                    <Box sx={{ p: 1, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 1, mb: 1, fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                                      {tc.expectedOutput}
+                                    </Box>
+                                    <Typography variant="caption" color="text.secondary">Actual Output:</Typography>
+                                    <Box sx={{ p: 1, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 1, mb: 1, fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                                      {tc.actualOutput}
+                                    </Box>
+                                  </>
+                                )}
+
+                                {tc.consoleOutput && tc.consoleOutput.trim() && (
+                                  <Box sx={{ mt: 2 }}>
+                                    <Typography variant="caption" color="text.secondary">Console Output (stdout/stderr):</Typography>
+                                    <Box sx={{ p: 1, bgcolor: 'rgba(0,0,0,0.3)', borderRadius: 1, fontFamily: 'monospace', fontSize: '0.8rem', whiteSpace: 'pre-wrap', border: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+                                      {tc.consoleOutput}
+                                    </Box>
+                                  </Box>
+                                )}
+                              </Box>
+                            ))}
                           </Box>
                         )}
                       </Box>
