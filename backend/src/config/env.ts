@@ -42,7 +42,7 @@ export const env = {
     refreshExpiresIn: parsed.data.JWT_REFRESH_EXPIRES_IN,
   },
   bcryptSaltRounds: parseInt(parsed.data.BCRYPT_SALT_ROUNDS, 10),
-  corsOrigin: parsed.data.CORS_ORIGIN,
+  corsOrigin: parsed.data.CORS_ORIGIN.split(',').map((o) => o.trim()),
   fingerprintSecret: parsed.data.FINGERPRINT_SECRET,
   logLevel: parsed.data.LOG_LEVEL,
   ollamaApiKey: parsed.data.OLLAMA_API_KEY,
